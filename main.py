@@ -1,13 +1,12 @@
-from flask import Flask, request, send_file
+from fastapi import FastAPI, UploadFile, File, Form
+from starlette.responses import FileResponse
 import subprocess
-import os
 
-app = Flask(__name__)
+app = FastAPI()
 
-@app.route('/', methods=['POST'])
-def convert_audio():
-    file = request.files['file']
-    output_format = request.form.get('format', 'mp3')
-    file.save('/tmp/input_file')
+@app.post('/')
+async def convert_audio(file: UploadFile = File(...), output_format: str = Form('mp3')):
+    with open('/tmp/input_file', 'wb') as buffer:
+        buffer.write(await file.read())
     subprocess.run(['ffmpeg', '-i', '/tmp/input_file', f'/tmp/output.{output_format}'])
-    return send_file(f'/tmp/output.{output_format}', attachment_filename=f'output.{output_format}')
+    return FileResponse(f'/tmp/output.{output_format}', filename=f'output.{output_format}')
