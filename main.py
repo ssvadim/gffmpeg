@@ -10,8 +10,8 @@ async def convert(file: UploadFile = File(...),
                         params: str = Form('-i')):
     with open('/tmp/input_file', 'wb') as buffer:
         buffer.write(await file.read())
-    ffmpeg_command = ['ffmpeg', '-y'] + params.split(" ") + \
-                    ['/tmp/input_file', f'/tmp/output.{output_format}']
+    ffmpeg_command = ['ffmpeg', '-i', '/tmp/input_file'] + params.split(" ") + \
+                     ['-y', f'/tmp/output.{output_format}']
     process = subprocess.run(ffmpeg_command, check=True)
     if process.returncode != 0:
         raise HTTPException(status_code=500, detail="FFmpeg failed to convert the file.")
