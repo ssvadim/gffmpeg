@@ -1,3 +1,5 @@
+![CI](https://github.com/your-username/your-repo/actions/workflows/ci.yml/badge.svg)
+
 # Media Converter
 
 Media Converter is a simple web service built with FastAPI. It allows you to convert media files to different formats using FFmpeg. The application accepts a file to be converted, the desired output format, and optional FFmpeg parameters.
