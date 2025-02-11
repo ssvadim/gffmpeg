@@ -1,10 +1,11 @@
-FROM python:3.11.4-alpine3.18
+FROM golang:alpine
 
-RUN apk update && \
-    apk add --no-cache ffmpeg
-
-COPY . /app
 WORKDIR /app
-RUN pip install --no-cache-dir -r requirements.txt
 
-CMD exec uvicorn --host 0.0.0.0 --port $PORT main:app
+COPY . .
+
+RUN go build -o echo-app
+
+EXPOSE 8080
+
+CMD ["./echo-app"]
