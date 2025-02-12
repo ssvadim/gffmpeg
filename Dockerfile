@@ -16,7 +16,7 @@ COPY . .
 RUN CGO_ENABLED=0 GOOS=linux go build -o echo-app
 
 # Stage 2: Minimal container
-FROM scratch
+FROM alpine
 WORKDIR /app
 COPY --from=builder /app/echo-app .
 ENV TEST="Default TEST value"
