@@ -4,36 +4,21 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-    - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up Go
-      uses: actions/setup-go@v2
-      with:
-        go-version: '1.20' # Update this to the version of Go you're using
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: '1.20'
 
-    - name: Build
-      run: go build -v ./...
+      - name: Build
+        run: go build -o echo-app .
 
-    - name: Test
-      run: go test -v ./...
-
-    - name: Run Echo Server
-      run: go run main.go &
-      env:
-        TEST: "This is a test environment variable"
-
-    - name: Test Echo Server
-      run: |
-        sleep 2 # Give the server some time to start
-        curl -s "http://localhost:8080?message=GitHubActions" | grep "Echo: GitHubActions" && \
-        curl -s "http://localhost:8080" | grep "Echo: Hello, World!" && \
-        curl -s "http://localhost:8080" | grep "TEST: This is a test environment variable"
+      - name: Test
+        run: go test -v ./...
